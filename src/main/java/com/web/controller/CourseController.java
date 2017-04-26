@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -54,18 +55,26 @@ public class CourseController {
      */
     @RequestMapping(value = "/course/addCoursePost1",method = RequestMethod.POST)
     public String addCoursePost1(@ModelAttribute("addCourse1") Course course,Model model) {
+        //获取用户的doaminCode和usernaem
+        Map<Object,Object> param1 = new HashMap<Object, Object>();
+        param1.put("userAccount",course.getUserAccount());
+        Request request1 = new Http().setUrl("/useris/service/getdetail").setParam(param1).get();
+        Assert.assertEquals(request1.getStatusCode(),200);
+        String domainCode = getRequestValue(request1.getResult(),"domainCode");
+        String userName = getRequestValue(request1.getResult(),"userName");
 
         //添加课程
         com.web.Request.Course course1 = new com.web.Request.Course();
         course1.addParamForCourseType(course.getCourseType());
-        String domainCode = course1.addParamForUserInfo(course.getUserAccount());
+        course1.addParamForUserInfo(course.getUserAccount());
         Request request = course1.doRequest();
 
 
+        String courseId = getCourseIdByCourseName(domainCode,request.getParams().get("vo.bean.courseName").toString());
         for(int i=0;i<course.getCoursewareCount();i++) {
             Courseware courseware = new Courseware();
-            courseware.addParamForCourseId(getCourseIdByCourseName(domainCode,request.getParams().get("vo.bean.courseName").toString()));
-            courseware.addParamForUserInfo(course.getUserAccount());
+            courseware.addParamForCourseId(courseId);
+            courseware.addParamForUserInfo(domainCode,userName);
             courseware.doRequest();
         }
 
@@ -132,6 +141,19 @@ public class CourseController {
         }
         if(json instanceof String){
             return getValue(JSON.parse((String) json), key);
+        }
+        return null;
+    }
+
+
+
+    public String getRequestValue(String json, String key){
+        JSONArray ja = JSON.parseArray(json);
+        for(int i=0; i<ja.size()-1; i+=2){
+            if(ja.get(i).toString().equals(key)){
+                return ja.get(i+1).toString();
+            }
+
         }
         return null;
     }

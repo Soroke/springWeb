@@ -22,14 +22,9 @@ public class Courseware {
     }
 
 
-    public String  addParamForUserInfo(String userAccount) {
-        Map<Object,Object> param1 = new HashMap<Object, Object>();
-        param1.put("userAccount",userAccount);
-        Request request = new Http().setUrl("/useris/service/getdetail").setParam(param1).get();
-        Assert.assertEquals(request.getStatusCode(),200);
-        param.put("vo.organNo",this.getRequestValue(request.getResult(),"domainCode"));
-        param.put("vo.userId",this.getRequestValue(request.getResult(),"userName"));
-        return getRequestValue(request.getResult(),"domainCode");
+    public void  addParamForUserInfo(String domainCode,String userName) {
+        param.put("vo.organNo",domainCode);
+        param.put("vo.userId",userName);
     }
 
     private void addParam() {
@@ -49,7 +44,7 @@ public class Courseware {
         param.put("vo.bean.resourseUrl","http://qdtestfile.faxuan.net/study/55f98538d3234d239b2e5e3fc91c493a.JPG");
 
         //课件描述
-        param.put("vo.bean.courseWareDiscription","我是课件描述！！");
+        param.put("vo.bean.couresWareDiscription","<p>我是课件描述！！</p>");
     }
 
     /**
@@ -64,14 +59,4 @@ public class Courseware {
                 .post();
     }
 
-    public String getRequestValue(String json, String key){
-        JSONArray ja = JSON.parseArray(json);
-        for(int i=0; i<ja.size()-1; i+=2){
-            if(ja.get(i).toString().equals(key)){
-                return ja.get(i+1).toString();
-            }
-
-        }
-        return null;
-    }
 }
