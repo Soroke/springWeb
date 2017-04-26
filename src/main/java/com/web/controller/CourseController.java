@@ -7,6 +7,7 @@ import com.web.Request.Courseware;
 import com.web.Return.Course;
 import com.web.core.Http;
 import com.web.core.Request;
+import com.web.util.UserInfor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,10 +39,16 @@ public class CourseController {
     @RequestMapping(value = "/course/addCoursePost",method = RequestMethod.POST)
     public String addCoursePost(@ModelAttribute("addCourse") Course course) {
 
+        //获取管理员domainCode和userName
+        UserInfor userInfor = new UserInfor(course.getUserAccount());
+        String domainCode = userInfor.getDomainCode();
+        String userName = userInfor.getUserName();
+
+        //循环请求添加课程接口
         for(int i=0;i<course.getCourseCount();i++) {
             com.web.Request.Course course1 = new com.web.Request.Course();
             course1.addParamForCourseType(course.getCourseType());
-            course1.addParamForUserInfo(course.getUserAccount());
+            course1.addParamForUserInfo(domainCode,userName);
             course1.doRequest();
         }
 
@@ -55,22 +62,21 @@ public class CourseController {
      */
     @RequestMapping(value = "/course/addCoursePost1",method = RequestMethod.POST)
     public String addCoursePost1(@ModelAttribute("addCourse1") Course course,Model model) {
-        //获取用户的doaminCode和usernaem
-        Map<Object,Object> param1 = new HashMap<Object, Object>();
-        param1.put("userAccount",course.getUserAccount());
-        Request request1 = new Http().setUrl("/useris/service/getdetail").setParam(param1).get();
-        Assert.assertEquals(request1.getStatusCode(),200);
-        String domainCode = getRequestValue(request1.getResult(),"domainCode");
-        String userName = getRequestValue(request1.getResult(),"userName");
+        //获取管理员domainCode和userName
+        UserInfor userInfor = new UserInfor(course.getUserAccount());
+        String domainCode = userInfor.getDomainCode();
+        String userName = userInfor.getUserName();
 
         //添加课程
         com.web.Request.Course course1 = new com.web.Request.Course();
         course1.addParamForCourseType(course.getCourseType());
-        course1.addParamForUserInfo(course.getUserAccount());
+        course1.addParamForUserInfo(domainCode,userName);
         Request request = course1.doRequest();
 
-
+        //获取课程Id
         String courseId = getCourseIdByCourseName(domainCode,request.getParams().get("vo.bean.courseName").toString());
+
+        //为该课程循环添加课件
         for(int i=0;i<course.getCoursewareCount();i++) {
             Courseware courseware = new Courseware();
             courseware.addParamForCourseId(courseId);
@@ -96,7 +102,7 @@ public class CourseController {
     public String getCourseIdByCourseName(String domainCode,String CourseName) {
         Map<Object,Object> param = new HashMap<Object, Object>();
         param.put("page",1);
-        param.put("rows",50);
+        param.put("rows",20);
         param.put("vo.organNo",domainCode);
         param.put("vo.bean.status","");
         param.put("vo.bean.courseName","");
@@ -141,19 +147,6 @@ public class CourseController {
         }
         if(json instanceof String){
             return getValue(JSON.parse((String) json), key);
-        }
-        return null;
-    }
-
-
-
-    public String getRequestValue(String json, String key){
-        JSONArray ja = JSON.parseArray(json);
-        for(int i=0; i<ja.size()-1; i+=2){
-            if(ja.get(i).toString().equals(key)){
-                return ja.get(i+1).toString();
-            }
-
         }
         return null;
     }

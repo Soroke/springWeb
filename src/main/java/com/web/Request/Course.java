@@ -25,15 +25,14 @@ public class Course {
         }
     }
 
-
-    public String  addParamForUserInfo(String userAccount) {
-        Map<Object,Object> param1 = new HashMap<Object, Object>();
-        param1.put("userAccount",userAccount);
-        Request request = new Http().setUrl("/useris/service/getdetail").setParam(param1).get();
-        Assert.assertEquals(request.getStatusCode(),200);
-        param.put("vo.organNo",this.getRequestValue(request.getResult(),"domainCode"));
-        param.put("vo.userId",this.getRequestValue(request.getResult(),"userName"));
-        return getRequestValue(request.getResult(),"domainCode");
+    /**
+     * 设置请求参数的domainCode和userName
+     * @param userName
+     * @param domainCode
+     */
+    public void addParamForUserInfo(String domainCode,String userName) {
+        param.put("vo.organNo",domainCode);
+        param.put("vo.userId",userName);
     }
 
     private void addParam() {
@@ -66,17 +65,5 @@ public class Course {
                 .setUrl("/sss/service/courseService!addCourse.do")
                 .setParam(param)
                 .post();
-    }
-
-
-    public String getRequestValue(String json, String key){
-        JSONArray ja = JSON.parseArray(json);
-        for(int i=0; i<ja.size()-1; i+=2){
-            if(ja.get(i).toString().equals(key)){
-                return ja.get(i+1).toString();
-            }
-
-        }
-        return null;
     }
 }
