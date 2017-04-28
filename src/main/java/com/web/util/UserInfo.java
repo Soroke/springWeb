@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by song on 17/4/26.
  */
-public class UserInfor {
+public class UserInfo {
     /**
      * 管理员用户名
      */
@@ -31,7 +31,7 @@ public class UserInfor {
      * 构造方法
      * @param userAccount
      */
-    public UserInfor(String userAccount) {
+    public UserInfo(String userAccount) {
         this.userAccount = userAccount;
         param.put("userAccount",this.userAccount);
         request = doRequest();
