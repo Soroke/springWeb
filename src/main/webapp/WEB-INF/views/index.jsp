@@ -58,6 +58,8 @@
     </div>
 
 </div><!-- /.container -->
-
+<!-- 适配移动端浏览器 -->
+<script>window.jQuery || document.write('<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"><\/script>')</script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -7,14 +7,12 @@ import com.web.Request.Courseware;
 import com.web.Return.Course;
 import com.web.core.Http;
 import com.web.core.Request;
-import com.web.util.UserInfor;
+import com.web.util.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,9 +38,9 @@ public class CourseController {
     public String addCoursePost(@ModelAttribute("addCourse") Course course) {
 
         //获取管理员domainCode和userName
-        UserInfor userInfor = new UserInfor(course.getUserAccount());
-        String domainCode = userInfor.getDomainCode();
-        String userName = userInfor.getUserName();
+        UserInfo userInfo = new UserInfo(course.getUserAccount());
+        String domainCode = userInfo.getDomainCode();
+        String userName = userInfo.getUserName();
 
         //循环请求添加课程接口
         for(int i=0;i<course.getCourseCount();i++) {
@@ -63,9 +61,9 @@ public class CourseController {
     @RequestMapping(value = "/course/addCoursePost1",method = RequestMethod.POST)
     public String addCoursePost1(@ModelAttribute("addCourse1") Course course,Model model) {
         //获取管理员domainCode和userName
-        UserInfor userInfor = new UserInfor(course.getUserAccount());
-        String domainCode = userInfor.getDomainCode();
-        String userName = userInfor.getUserName();
+        UserInfo userInfo = new UserInfo(course.getUserAccount());
+        String domainCode = userInfo.getDomainCode();
+        String userName = userInfo.getUserName();
 
         //添加课程
         com.web.Request.Course course1 = new com.web.Request.Course();
