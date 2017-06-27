@@ -70,10 +70,6 @@
     <hr style="height:10px;border:none;border-top:10px groove skyblue;" />
 
     <form:form action="/course/addCoursePost" method="post" commandName="addCourse" role="form">
-        <div class="form-group">
-            <label>管理员账号</label>
-            <input type="text" class="form-control" id="userAccount" name="userAccount" placeholder="请输入管理员账号:"/>
-        </div>
 
         <div class="form-group">
             <label>课程类型</label>
@@ -98,10 +94,6 @@
     <hr style="height:10px;border:none;border-top:10px groove skyblue;" />
 
     <form:form action="/course/addCoursePost1" method="post" commandName="addCourse1" role="form">
-        <div class="form-group">
-            <label>管理员账号</label>
-            <input type="text" class="form-control" id="userAccount1" name="userAccount" placeholder="请输入管理员账号:"/>
-        </div>
 
         <div class="form-group">
             <label>课程类型</label>

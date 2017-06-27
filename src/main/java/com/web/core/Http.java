@@ -1,5 +1,7 @@
 package com.web.core;
 
+import com.web.Return.Environment;
+import com.web.controller.GetEnvironment;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -25,6 +27,12 @@ import static org.apache.commons.codec.Charsets.UTF_8;
  * Created by song on 2017/4/1.
  */
 public class Http {
+
+    /**
+     * 环境信息
+     */
+    Environment en = GetEnvironment.getInfo();
+
     /**
      * 测试环境host
      */
@@ -95,7 +103,17 @@ public class Http {
             e.printStackTrace();
         }
 
-        String environment = prop.getProperty("environment");
+        String environment = null;
+        switch (Integer.valueOf(en.getEnvironment())) {
+            case 0:
+                environment = "host.qa";
+                break;
+            case 1:
+                environment = "host.rc";
+                break;
+            case 2:
+                environment = "host.online";
+        }
         host = prop.getProperty(environment).equals("") || prop.getProperty(environment) == null ? host : prop.getProperty(environment);
         timeOut = Integer.parseInt(prop.getProperty("host.requestTimeOut").equals("") ? String.valueOf(timeOut) : prop.getProperty("host.requestTimeOut"));
     }

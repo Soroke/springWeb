@@ -1,4 +1,10 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: song
+  Date: 2017/5/3
+  Time: 18:06
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +50,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/course/addCourse">学习模块</a></li>
-                <li><a href="/">仁</a></li>
+                <li class="active"><a href="/course/test">测试弹窗</a></li>
                 <li><a href="/">坤</a></li>
             </ul>
         </div><!--/.nav-collapse -->
@@ -52,29 +58,12 @@
 </nav>
 
 <div class="container">
-    <h1>设置环境和管理员账号</h1>
-    <hr style="height:10px;border:none;border-top:10px groove skyblue;" />
 
-    <form:form action="/settingEnvironmentPost" method="post" commandName="settingEnvironment" role="form">
+    <div class="starter-template">
+        <h1>Test页</h1>
+        <p class="lead">Test<br>😁😌❤️👏😘😙😋😝🚪🏡🍚😁🚘🚴</p>
+    </div>
 
-        <div class="form-group">
-            <label>请选择学法平台环境</label>
-            <select class="form-control" name="environment" id="environment">
-                <option value="0">测试环境</option>
-                <option value="1">预上线环境</option>
-                <option value="2">线上环境</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>管理员账号</label>
-            <input type="text" class="form-control" id="userAccount" name="userAccount" placeholder="请输入管理员账号:"/>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-sm btn-success">保存</button>
-        </div>
-    </form:form>
 </div><!-- /.container -->
 <!-- 适配移动端浏览器 -->
 <script>window.jQuery || document.write('<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"><\/script>')</script>

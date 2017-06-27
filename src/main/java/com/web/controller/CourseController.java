@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.web.Request.Courseware;
 import com.web.Return.Course;
+import com.web.Return.Environment;
 import com.web.core.Http;
 import com.web.core.Request;
 import com.web.util.UserInfo;
@@ -23,6 +24,9 @@ import java.util.Map;
 @Controller
 public class CourseController {
 
+    Environment environment = GetEnvironment.getInfo();
+    String userAccount = environment.getUserAccount();
+
     /**
      * 添加课程页面
      */
@@ -38,7 +42,7 @@ public class CourseController {
     public String addCoursePost(@ModelAttribute("addCourse") Course course) {
 
         //获取管理员domainCode和userName
-        UserInfo userInfo = new UserInfo(course.getUserAccount());
+        UserInfo userInfo = new UserInfo(userAccount);
         String domainCode = userInfo.getDomainCode();
         String userName = userInfo.getUserName();
 
@@ -61,7 +65,7 @@ public class CourseController {
     @RequestMapping(value = "/course/addCoursePost1",method = RequestMethod.POST)
     public String addCoursePost1(@ModelAttribute("addCourse1") Course course,Model model) {
         //获取管理员domainCode和userName
-        UserInfo userInfo = new UserInfo(course.getUserAccount());
+        UserInfo userInfo = new UserInfo(userAccount);
         String domainCode = userInfo.getDomainCode();
         String userName = userInfo.getUserName();
 
