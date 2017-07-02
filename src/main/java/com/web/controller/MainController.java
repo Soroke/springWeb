@@ -1,10 +1,13 @@
 package com.web.controller;
 
 import com.web.Return.Environment;
+import com.web.core.Http;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.*;
 
@@ -15,7 +18,9 @@ import java.io.*;
 public class MainController {
 
     @RequestMapping(value = "/",method = RequestMethod.GET)
-    public String index() {
+    public String index(Model model) {
+        Environment environment = new GetEnvironment().getInfo();
+        model.addAttribute(environment);
         return "index";
     }
 
@@ -41,7 +46,7 @@ public class MainController {
 
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter( new FileWriter(file));
+            writer = new BufferedWriter( new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
             writer.write(environment.getEnvironment());
             writer.write("\n");
             writer.write(environment.getUserAccount());
@@ -60,9 +65,17 @@ public class MainController {
                 }
             }
         }
-
+//System.out.println("Environment:"+environment.getEnvironment() + "\tUserAccount:" + environment.getUserAccount());
+//System.out.println("Environment:"+ new GetEnvironment().getInfo().getEnvironment() + "\tUserAccount:" + new GetEnvironment().getInfo().getUserAccount());
         // 重定向地址
         return "redirect:/";
+    }
+
+    @RequestMapping(value = "/test/test",method = RequestMethod.GET)
+    public String gettext(Model model) {
+        Environment environment = new GetEnvironment().getInfo();
+        model.addAttribute(environment);
+        return "/test/test";
     }
 
 }

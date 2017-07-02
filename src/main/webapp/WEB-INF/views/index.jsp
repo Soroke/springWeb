@@ -1,21 +1,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="public/public.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>测试页</title>
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-    <!-- 支持移动设备的缩放 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <style type="text/css">
@@ -30,54 +21,98 @@
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">测试项目</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="/course/addCourse">学习模块</a></li>
-                <li><a href="/">仁</a></li>
-                <li><a href="/">坤</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</nav>
-
 <div class="container">
-    <h1>设置环境和管理员账号</h1>
+    <button type="button" class="btn btn-primary btn-lg" style="text-shadow: black 5px 3px 3px;">
+        <span class="glyphicon glyphicon-globe"></span> ${environment.environment}
+    </button>
+    <button type="button" class="btn btn-primary btn-lg" style="text-shadow: black 5px 3px 3px;">
+        <span class="glyphicon glyphicon-user"></span> ${environment.userAccount}
+    </button>
+    <!-- 按钮触发模态框 -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="text-shadow: black 5px 3px 3px;">修改环境和管理员用户</button>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form:form id="defaultForm" action="/settingEnvironmentPost" method="post" commandName="settingEnvironment" role="form">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">修改环境和管理员用户</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>请选择学法平台环境</label>
+                            <select class="form-control" name="environment" id="environment">
+                                <option value="测试环境">测试环境</option>
+                                <option value="预上线环境">预上线环境</option>
+                                <option value="线上环境">线上环境</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>管理员账号</label>
+                            <input type="text" class="form-control" id="userAccount" name="userAccount" placeholder="请输入管理员账号:"/>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">提交更改</button>
+                        </div>
+                    </div>
+                </form:form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
     <hr style="height:10px;border:none;border-top:10px groove skyblue;" />
 
-    <form:form action="/settingEnvironmentPost" method="post" commandName="settingEnvironment" role="form">
+    <div class="starter-template">
+        <h1>学法平台数据添加</h1>
+        <p class="lead"><br>😁😌❤️👏😘😙😋😝🚪🏡🍚😁🚘🚴</p>
+    </div>
 
-        <div class="form-group">
-            <label>请选择学法平台环境</label>
-            <select class="form-control" name="environment" id="environment">
-                <option value="0">测试环境</option>
-                <option value="1">预上线环境</option>
-                <option value="2">线上环境</option>
-            </select>
-        </div>
 
-        <div class="form-group">
-            <label>管理员账号</label>
-            <input type="text" class="form-control" id="userAccount" name="userAccount" placeholder="请输入管理员账号:"/>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-sm btn-success">保存</button>
-        </div>
-    </form:form>
 </div><!-- /.container -->
-<!-- 适配移动端浏览器 -->
-<script>window.jQuery || document.write('<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"><\/script>')</script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        /**
+         * 下面是进行插件初始化
+         * 你只需传入相应的键值对
+         * */
+        $('#defaultForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {/*验证*/
+                userAccount: {/*键名username和input name值对应*/
+                    message: 'The username is not valid',
+                    validators: {
+                        notEmpty: {/*非空提示*/
+                            message: '管理员账号不能为空'
+                        },
+                        regexp: {/* 只需加此键值对，包含正则表达式，和提示 */
+                            regexp: /^[a-zA-Z0-9]+$/,
+                            message: '管理员账号只能是数字和字母的组合'
+                        },
+                        stringLength: {/*长度提示*/
+                            min: 2,
+                            max: 30,
+                            message: '管理员账号长度必须在2到30之间'
+                        }/*最后一个没有逗号*/
+                    }
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>

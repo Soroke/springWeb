@@ -31,7 +31,7 @@ public class Http {
     /**
      * 环境信息
      */
-    Environment en = GetEnvironment.getInfo();
+    Environment en = new GetEnvironment().getInfo();
 
     /**
      * 测试环境host
@@ -104,14 +104,14 @@ public class Http {
         }
 
         String environment = null;
-        switch (Integer.valueOf(en.getEnvironment())) {
-            case 0:
+        switch (en.getEnvironment()) {
+            case "测试环境":
                 environment = "host.qa";
                 break;
-            case 1:
+            case "预上线环境":
                 environment = "host.rc";
                 break;
-            case 2:
+            case "线上环境":
                 environment = "host.online";
         }
         host = prop.getProperty(environment).equals("") || prop.getProperty(environment) == null ? host : prop.getProperty(environment);
@@ -164,6 +164,21 @@ public class Http {
      *      this
      */
     public Http setParam(Map<Object,Object> params) {
+        this.params = params;
+        req.setParams(params);
+        return this;
+    }
+
+    /**
+     * 设置参数
+     * @param key,value
+     *      参数map
+     * @return
+     *      this
+     */
+    public Http setParam(Object key,Object value) {
+        Map<Object,Object> params = new HashMap<Object, Object>();
+        params.put(key,value);
         this.params = params;
         req.setParams(params);
         return this;

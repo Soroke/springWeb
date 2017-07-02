@@ -5,7 +5,9 @@
          version="3.1">
 
 
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>FaxuanMVC</display-name>
+
+
 
   <servlet>
     <servlet-name>mvc-web</servlet-name>
