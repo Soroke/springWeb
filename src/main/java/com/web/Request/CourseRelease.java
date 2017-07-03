@@ -2,6 +2,7 @@ package com.web.Request;
 
 import com.web.core.Http;
 import com.web.core.Request;
+import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,11 +43,18 @@ public class CourseRelease {
         1
         vo.bean.targetDomainCode
         101002001002002
+		2002001001001000000
          */
-        params.put("nowStatus",0);
+
         params.put("userDomainCode",userDomainCode);
         params.put("vo.bean.id",coueseId);
-        params.put("vo.bean.industryCodes","00000000");
+		if(userDomainCode.length() == 19) {
+			params.put("vo.bean.industryCodes",getIndustryCodes());
+            params.put("nowStatus",1);
+		} else {
+			params.put("vo.bean.industryCodes","00000000");
+            params.put("nowStatus",0);
+		}
         params.put("vo.bean.rankIds",rankIds);
         params.put("vo.bean.status",1);
         params.put("vo.bean.targetDomainCode",targetDomainCode);
@@ -57,5 +65,25 @@ public class CourseRelease {
         addParam();
         return new Http().setUrl("/sss/service/courseService!publishCourse.do").setParam(params).post();
     }
-
+	
+	public String getIndustryCodes() {
+        String domainCode = "";
+        if(targetDomainCode.length() == 19) {
+            domainCode = targetDomainCode;
+        } else {
+            domainCode = userDomainCode;
+        }
+		Request request = new Http().setUrl("/bss/service/getIndustryCodes").setParam("domainCode",domainCode).get();
+		String result = request.getResult();
+		String[] industryCodes = result.split("\n")[1].split(";");
+		String codes = "";
+        for(String industryCode:industryCodes) {
+            if(industryCode.length() == 9) {
+                codes += industryCode.replaceAll("\r","");
+            } else {
+                codes += (industryCode + ";");
+            }
+        }
+		return codes;
+	}
 }

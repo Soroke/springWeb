@@ -29,8 +29,8 @@ import java.util.Map;
 @Controller
 public class CourseController {
 
-    Environment environment = new GetEnvironment().getInfo();
-    String userAccount = environment.getUserAccount();
+   // Environment environment = new GetEnvironment().getInfo().getUserAccount();
+   // String userAccount = environment.getUserAccount();
 
     /**
      * 添加课程页面
@@ -54,7 +54,7 @@ public class CourseController {
         List<String> courseIds = new ArrayList<String>();
 
         //获取管理员domainCode和userName
-        UserInfo userInfo = new UserInfo(userAccount);
+        UserInfo userInfo = new UserInfo(new GetEnvironment().getInfo().getUserAccount());
         String domainCode = userInfo.getDomainCode();
         String userName = userInfo.getUserName();
 
@@ -144,7 +144,7 @@ public class CourseController {
     @RequestMapping(value = "/course/addCoursePost1",method = RequestMethod.POST)
     public String addCoursePost1(@ModelAttribute("addCourse1") Course course,Model model) {
         //获取管理员domainCode和userName
-        UserInfo userInfo = new UserInfo(userAccount);
+        UserInfo userInfo = new UserInfo(new GetEnvironment().getInfo().getUserAccount());
         String domainCode = userInfo.getDomainCode();
         String userName = userInfo.getUserName();
 
