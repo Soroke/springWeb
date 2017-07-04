@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.web.core.Http;
 import com.web.core.Request;
+import com.web.util.GetDate;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,10 +31,15 @@ public class Course {
     Map<Object,Object> param = new HashMap<Object, Object>();
 
     public void addParamForCourseType(int type) {
+        String[] dates = GetDate.getStringArrayDate();
+        String date = dates[0] + "-" + dates[1] + "-" + dates[2] + " " + GetDate.getDateSceond();
+
         if(type  == 0) {
             param.put("vo.bean.courseClassify","12");
+            param.put("vo.bean.courseName", "必修课程" +date);
         } else {
             param.put("vo.bean.courseClassify","11");
+            param.put("vo.bean.courseName", "选修课程" +date);
         }
     }
 
@@ -48,8 +54,6 @@ public class Course {
     }
 
     private void addParam() {
-        //课程名称时间戳
-        param.put("vo.bean.courseName", "自动添加课程");
 
         //语言标签
         param.put("vo.bean.languageType",0);
@@ -64,7 +68,7 @@ public class Course {
         param.put("vo.bean.jpgPath",images[(int)(Math.random()*14)]);
 
         //课程描述
-        param.put("vo.bean.courseDiscription","我是课程描述！！我是课程描述！！我是课程描述！！我是课程描述！！我是课程描述！！我是课程描述！！");
+        param.put("vo.bean.courseDiscription","我是课程描述，我有1000个字；美国法官宣布绑架中国访问学者的嫌疑人不得保释新华社芝加哥7月3日电，美国伊利诺伊州中部地区联邦法院３日宣布，绑架中国访问学者章莹颖的嫌疑人布伦特·A·克里斯滕森不得保释在下次庭审前继续收押。这一决定是由联邦法官埃里克·朗在当地时间当天上午10时左右举行的针对克里斯滕森的法庭聆讯上作出的。当天的聆讯仅持续9分钟，克里斯滕森始终保持沉默。根据法官作出的决定，针对克里斯滕森的下次聆讯将在当地时间5日下午3时举行。美国地区检察官办公室发言人莎伦·保罗在聆讯结束后对媒体表示，如果克里斯滕森最终被判绑架罪名成立，他将面临终身监禁。美国联邦调查局6月30日宣布，当晚逮捕白人男子布伦特·A·克里斯滕森，指控他涉嫌绑架中国访问学者章莹颖。");
     }
 
     /**
