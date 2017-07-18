@@ -126,7 +126,7 @@ public class CourseController {
         //发布课程
         if(!course.getDomainCode().equals("") || !(course.getDomainCode() == "")) {
             for(int i =0;i<courseIds.size();i++) {
-                CourseRelease courseRelease = new CourseRelease(domainCode, course.getDomainCode(), getRankIds(userInfo.getAreaCode()), courseIds.get(i));
+                CourseRelease courseRelease = new CourseRelease(domainCode, course.getDomainCode(), getRankIds(getAreaCodeByDomainCode(course.getDomainCode())), courseIds.get(i));
                 courseRelease.doRequest();
             }
         }
@@ -281,6 +281,22 @@ public class CourseController {
         return "redirect:/course/addCourse";
     }
 
+    /**
+     * 根据单位Code获取单位的区域Code
+     * @param domainCode
+     * @return
+     */
+    public String getAreaCodeByDomainCode(String domainCode) {
+        Request request = new Http().setUrl("/sss/service/courseService!doGetAreaCodeByDomainCode.do").setParam("domainCode",domainCode).get();
+        String areaCode = JsonHelper.getValue(request.getResult(),"areaCode").toString().substring(0,2);
+        return areaCode + "0000";
+    }
+
+    /**
+     * 根据区域code获取rankId
+     * @param areaCode
+     * @return
+     */
     public String getRankIds(String areaCode) {
 
         String rankIds = "";
@@ -308,4 +324,6 @@ public class CourseController {
         return rankIds;
 
     }
+
+
 }
