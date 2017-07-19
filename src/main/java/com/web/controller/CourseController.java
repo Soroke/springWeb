@@ -233,7 +233,12 @@ public class CourseController {
     }
 
 
-
+    /**
+     *
+     * 处理修改环境和管理员请求
+     * @param environment
+     * @return
+     */
     @RequestMapping(value = "/course/settingEnvironmentPost",method = RequestMethod.POST)
     public String settingEnvironmentPost(@ModelAttribute("settingEnvironment") Environment environment) {
         File file = new File("./environment.txt");
