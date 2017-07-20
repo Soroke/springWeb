@@ -88,47 +88,69 @@
 
     <%
         String info = "";
+        String info1 = "";
         Environment environment = new GetEnvironment().getInfo();
         String userAccount = environment.getUserAccount();
         Map<Object,Object> params = new HashMap<Object, Object>();
-        params.put("dc",new Date().getTime());
         params.put("domainCode",new UserInfo(userAccount).getDomainCode());
-        params.put("page",1);
-        params.put("paperName","");
-        params.put("paperType",1);
-        params.put("rows",10);
-        Request request1 = new Http().setUrl("/ess/service/paper/paperAo!doGetList.do").setParam(params).post();
+        Request request1 = new Http().setUrl("/ess/service/exam/examAo!doGetExamPD.do").setParam(params).post();
         String result = request1.getResult();
 
-        int count = Integer.valueOf(JsonHelper.getValue(result,"total").toString().toString());
-        if(count == 0) {
-            info += "<label>该用户下没有练习题</label>";
-        } else if(count == 1) {
-            String paper = JsonHelper.getValue(result,"rows").toString();
-            paper = paper.substring(1);
-            paper = paper.substring(0,paper.length()-1);
-            String id = JsonHelper.getValue(paper,"id").toString();
-            String name = JsonHelper.getValue(paper,"paperName").toString();
-            info += "<option value='" + id + "'>" + name + "</option>";
-        } else {
-            String[] papers = JsonHelper.getValue(result,"rows").toString().split("},\\{");
-            papers[0] += "}";
-            papers[0] = papers[0].substring(1);
-            papers[papers.length-1] = "{" + papers[papers.length-1];
-            papers[papers.length-1] = papers[papers.length-1].substring(0,papers[papers.length-1].length()-1);
-            for(int i=1;i<papers.length-1;i++) {
-                papers[i] = "{" + papers[i] + "}";
-            }
+        String paper = JsonHelper.getValue(result,"papers").toString();
+        String diploma = JsonHelper.getValue(result,"diplomas").toString();
 
-            for (int i=0;i<papers.length;i++) {
-                String id = JsonHelper.getValue(papers[i],"id").toString();
-                String name = JsonHelper.getValue(papers[i],"paperName").toString();
-                info += "<option value='" + id + "'>" + name + "</option>";
-            }
+
+        if(paper.equals("[]")) {
+        info += "<option value='-1'>该用户下没有试卷</option>";
+        } else if(!paper.contains("},{")) {
+        paper = paper.substring(1);
+        paper = paper.substring(0,paper.length()-1);
+        String id = JsonHelper.getValue(paper,"examPaperId").toString();
+        String name = JsonHelper.getValue(paper,"examPaperName").toString();
+        info += "<option value='" + id + "'>" + name + "</option>";
+        } else {
+        String[] papers = paper.split("},\\{");
+        papers[0] += "}";
+        papers[0] = papers[0].substring(1);
+        papers[papers.length-1] = "{" + papers[papers.length-1];
+        papers[papers.length-1] = papers[papers.length-1].substring(0,papers[papers.length-1].length()-1);
+        for(int i=1;i<papers.length-1;i++) {
+        papers[i] = "{" + papers[i] + "}";
         }
 
+        for (int i=0;i<papers.length;i++) {
+        String id = JsonHelper.getValue(papers[i],"examPaperId").toString();
+        String name = JsonHelper.getValue(papers[i],"examPaperName").toString();
+        info += "<option value='" + id + "'>" + name + "</option>";
+        }
+        }
+
+        if(diploma.equals("[]")) {
+        info1 += "<option value='-1'>该用户下没有证书</option>";
+        } else if(!diploma.contains("},{")) {
+        diploma = diploma.substring(1);
+        diploma = diploma.substring(0,diploma.length()-1);
+        String id = JsonHelper.getValue(diploma,"examDiplomaId").toString();
+        String name = JsonHelper.getValue(diploma,"diplomaName").toString();
+        info1 += "<option value='" + id + ";" + name + "'>" + name + "</option>";
+        } else {
+        String[] diplomas = diploma.split("},\\{");
+        diplomas[0] += "}";
+        diplomas[0] = diplomas[0].substring(1);
+        diplomas[diplomas.length-1] = "{" + diplomas[diplomas.length-1];
+        diplomas[diplomas.length-1] = diplomas[diplomas.length-1].substring(0,diplomas[diplomas.length-1].length()-1);
+        for(int i=1;i<diplomas.length-1;i++) {
+        diplomas[i] = "{" + diplomas[i] + "}";
+        }
+
+        for (int i=0;i<diplomas.length;i++) {
+        String id = JsonHelper.getValue(diplomas[i],"examDiplomaId").toString();
+        String name = JsonHelper.getValue(diplomas[i],"diplomaName").toString();
+        info1 += "<option value='" + id + ";" + name + "'>" + name + "</option>";
+        }
+        }
     %>
-    <form:form id="Form1" action="/exam/addExamPost" method="post" commandName="addCourse" role="form">
+    <form:form id="Form1" action="/exam/addExamPost" method="post" commandName="addExam" role="form">
 
         <div class="form-group">
             <label>考试类型</label>
@@ -156,6 +178,13 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <label>请选择为考试关联的证书</label>
+            <select class="form-control" name="examDiploma" id="examDiploma">
+                <%=info1%>
+            </select>
+        </div>
+
         <div class="alert alert-success">
             <label>默认考试开始时间是当前时间，考试结束时间为1周后</label>
         </div>
@@ -163,7 +192,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">考试开始时间</label>
             <div class="input-group date form_datetime col-md-5">
-                <input size="16" type="text" id="datetimeStart" readonly class="form-control">
+                <input size="16" type="text" name="datetimeStart" id="datetimeStart" readonly class="form-control">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>
@@ -172,7 +201,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">考试结束时间</label>
             <div class="input-group date form_datetime col-md-5">
-                <input size="16" type="text" id="datetimeEnd" readonly class="form-control">
+                <input size="16" type="text" name="datetimeEnd" id="datetimeEnd" readonly class="form-control">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>
@@ -186,7 +215,7 @@
 
         <div class="form-group">
             <label>考试添加数量</label>
-            <input type="text" class="form-control" id="courseCount" name="courseCount" placeholder="请输入考试添加数量:"/>
+            <input type="text" class="form-control" id="examCount" name="examCount" placeholder="请输入考试添加数量:"/>
         </div>
 
         <div class="form-group">
@@ -318,7 +347,7 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {/*验证*/
-                courseCount: {/*键名username和input name值对应*/
+                examCount: {/*键名username和input name值对应*/
                     message: 'The username is not valid',
                     validators: {
                         notEmpty: {/*非空提示*/

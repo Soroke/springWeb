@@ -38,15 +38,12 @@ public class GetEnvironment {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));
             String lineTxt;
             while((lineTxt = reader.readLine()) != null) {
-//System.out.println(lineTxt);
                 if(lineTxt.equals("测试环境") || lineTxt.equals("预上线环境") || lineTxt.equals("线上环境")) {
-
                     environment.setEnvironment(lineTxt);
                 } else {
                     environment.setUserAccount(lineTxt);
                 }
             }
-//System.out.println("环境：" + environment.getEnvironment() + "\t用户：" + environment.getUserAccount());
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

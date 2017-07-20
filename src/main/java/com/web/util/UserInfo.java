@@ -81,6 +81,14 @@ public class UserInfo {
     }
 
     /**
+     *获取用户账户
+     * @return
+     */
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    /**
      * 获取用户areaCode
      * @return String
      */
@@ -110,5 +118,20 @@ public class UserInfo {
      */
     public String getId() {
         return getRequestValue(request.getResult(),"id");
+    }
+
+    /**
+     * 获取用户的sid
+     * @return
+     */
+    public String getSid() {
+        /**
+         * 获取用户的sid
+         */
+        Request request = new Http()
+                .setUrl("/useris/service/getusersid")
+                .setParam("userAccount",userAccount)
+                .get();
+        return request.getResult().split("\n")[1].split("\r")[0];
     }
 }
